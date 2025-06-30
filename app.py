@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
 from videodb import *
 from userdb import *
+from watchhistory import *
 import jwt
 import datetime
 
@@ -70,6 +71,11 @@ def profile():
     except jwt.InvalidTokenError:
         return jsonify({'error': 'Invalid token'}), 401
     return jsonify({'error': 'Invalid credentials'}), 401
+
+@app.route('/watchhistory/<int:user_id>')
+def user_watch_history(user_id):
+    from watchhistory import export_watch_history
+    return jsonify(export_watch_history(user_id))
 
 if __name__ == '__main__':
     app.run(debug=True)
